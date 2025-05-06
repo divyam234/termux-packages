@@ -4,13 +4,13 @@ TERMUX_PKG_LICENSE="Apache-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION="2.35.1"
 TERMUX_PKG_SRCURL="https://github.com/docker/compose/archive/v${TERMUX_PKG_VERSION}.tar.gz"
-TERMUX_PKG_SHA256=999f5e3405c8da64f7296d8e90b6777a2ce7f3a582b4b1800a7a1c21dbebaf16
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS=docker
 
 termux_step_make() {
 	termux_setup_golang
 	export GOPATH=$TERMUX_PKG_BUILDDIR
+	bash ${TERMUX_SCRIPTDIR}/scripts/fix_rutime.sh $TERMUX_PKG_SRCDIR
 	cd $TERMUX_PKG_SRCDIR
 	mkdir bin/
 	if ! [ -z "$GOOS" ];then export GOOS=android;fi

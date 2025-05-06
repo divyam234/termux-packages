@@ -1,28 +1,72 @@
---- a/defaults/defaults_unix.go
-+++ b/defaults/defaults_unix.go
-@@ -22,19 +22,19 @@
+diff --git a/defaults/defaults_linux.go b/defaults/defaults_linux.go
+index dc1ff0909..04dd869b5 100644
+--- a/defaults/defaults_linux.go
++++ b/defaults/defaults_linux.go
+@@ -18,12 +18,12 @@ package defaults
+ 
  const (
- 	// DefaultRootDir is the default location used by containerd to store
- 	// persistent data
--	DefaultRootDir = "/var/lib/containerd"
-+	DefaultRootDir = "@TERMUX_PREFIX@/var/lib/containerd"
- 	// DefaultStateDir is the default location used by containerd to store
- 	// transient data
--	DefaultStateDir = "/run/containerd"
-+	DefaultStateDir = "@TERMUX_PREFIX@/var/run/containerd"
  	// DefaultAddress is the default unix socket address
 -	DefaultAddress = "/run/containerd/containerd.sock"
-+	DefaultAddress = "@TERMUX_PREFIX@/var/run/containerd/containerd.sock"
++	DefaultAddress = "@TERMUX_PREFIX@/run/containerd/containerd.sock"
  	// DefaultDebugAddress is the default unix socket address for pprof data
 -	DefaultDebugAddress = "/run/containerd/debug.sock"
-+	DefaultDebugAddress = "@TERMUX_PREFIX@/var/run/containerd/debug.sock"
++	DefaultDebugAddress = "@TERMUX_PREFIX@/run/containerd/debug.sock"
  	// DefaultFIFODir is the default location used by client-side cio library
  	// to store FIFOs.
 -	DefaultFIFODir = "/run/containerd/fifo"
-+	DefaultFIFODir = "@TERMUX_PREFIX@/var/run/containerd/fifo"
++	DefaultFIFODir = "@TERMUX_PREFIX@/run/containerd/fifo"
  	// DefaultRuntime is the default linux runtime
  	DefaultRuntime = "io.containerd.runc.v2"
+ 	// DefaultSnapshotter will set the default snapshotter for the platform.
+@@ -32,7 +32,7 @@ const (
+ 	DefaultSnapshotter = "overlayfs"
+ 	// DefaultStateDir is the default location used by containerd to store
+ 	// transient data
+-	DefaultStateDir = "/run/containerd"
++	DefaultStateDir = "@TERMUX_PREFIX@/run/containerd"
+ 	// DefaultDiffer will set the default differ for the platform.
+ 	DefaultDiffer = "walking"
+ )
+diff --git a/defaults/defaults_unix.go b/defaults/defaults_unix.go
+index 41d00b943..b2632609c 100644
+--- a/defaults/defaults_unix.go
++++ b/defaults/defaults_unix.go
+@@ -20,8 +20,8 @@ package defaults
+ 
+ const (
  	// DefaultConfigDir is the default location for config files.
 -	DefaultConfigDir = "/etc/containerd"
 +	DefaultConfigDir = "@TERMUX_PREFIX@/etc/containerd"
+ 	// DefaultRootDir is the default location used by containerd to store
+ 	// persistent data
+-	DefaultRootDir = "/var/lib/containerd"
++	DefaultRootDir = "@TERMUX_PREFIX@/lib/containerd"
+ )
+diff --git a/defaults/defaults_unix_nolinux.go b/defaults/defaults_unix_nolinux.go
+index 8e263eca6..75f29369e 100644
+--- a/defaults/defaults_unix_nolinux.go
++++ b/defaults/defaults_unix_nolinux.go
+@@ -20,19 +20,19 @@ package defaults
+ 
+ const (
+ 	// DefaultAddress is the default unix socket address
+-	DefaultAddress = "/var/run/containerd/containerd.sock"
++	DefaultAddress = "@TERMUX_PREFIX@/run/containerd/containerd.sock"
+ 	// DefaultDebugAddress is the default unix socket address for pprof data
+-	DefaultDebugAddress = "/var/run/containerd/debug.sock"
++	DefaultDebugAddress = "@TERMUX_PREFIX@/run/containerd/debug.sock"
+ 	// DefaultFIFODir is the default location used by client-side cio library
+ 	// to store FIFOs.
+-	DefaultFIFODir = "/var/run/containerd/fifo"
++	DefaultFIFODir = "@TERMUX_PREFIX@/run/containerd/fifo"
+ 	// DefaultSnapshotter will set the default snapshotter for the platform.
+ 	// This will be based on the client compilation target, so take that into
+ 	// account when choosing this value.
+ 	DefaultSnapshotter = "native"
+ 	// DefaultStateDir is the default location used by containerd to store
+ 	// transient data
+-	DefaultStateDir = "/var/run/containerd"
++	DefaultStateDir = "@TERMUX_PREFIX@/run/containerd"
+ 	// DefaultDiffer will set the default differ for the platform.
+ 	DefaultDiffer = "walking"
  )

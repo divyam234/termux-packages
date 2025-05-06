@@ -1,0 +1,72 @@
+diff --git a/Makefile b/Makefile
+index e40771ad..52b83cf1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -30,28 +30,12 @@ GOARCH := $(shell $(GO) env GOARCH)
+ TRIMPATH := -trimpath
+ 
+ GO_BUILDMODE :=
+-# Enable dynamic PIE executables on supported platforms.
+-ifneq (,$(filter $(GOARCH),386 amd64 arm arm64 ppc64le riscv64 s390x))
+-	ifeq (,$(findstring -race,$(EXTRA_FLAGS)))
+-		GO_BUILDMODE := "-buildmode=pie"
+-	endif
+-endif
+ GO_BUILD := $(GO) build $(TRIMPATH) $(GO_BUILDMODE) \
+ 	$(EXTRA_FLAGS) -tags "$(BUILDTAGS)" \
+ 	-ldflags "$(LDFLAGS_COMMON) $(EXTRA_LDFLAGS)"
+ 
+ GO_BUILDMODE_STATIC :=
+ LDFLAGS_STATIC := -extldflags -static
+-# Enable static PIE executables on supported platforms.
+-# This (among the other things) requires libc support (rcrt1.o), which seems
+-# to be available only for arm64 and amd64 (Debian Bullseye).
+-ifneq (,$(filter $(GOARCH),arm64 amd64))
+-	ifeq (,$(findstring -race,$(EXTRA_FLAGS)))
+-		GO_BUILDMODE_STATIC := -buildmode=pie
+-		LDFLAGS_STATIC := -linkmode external -extldflags -static-pie
+-	endif
+-endif
+-# Enable static PIE binaries on supported platforms.
+ GO_BUILD_STATIC := $(GO) build $(TRIMPATH) $(GO_BUILDMODE_STATIC) \
+ 	$(EXTRA_FLAGS) -tags "$(BUILDTAGS) netgo osusergo" \
+ 	-ldflags "$(LDFLAGS_COMMON) $(LDFLAGS_STATIC) $(EXTRA_LDFLAGS)"
+diff --git a/libcontainer/criu_linux.go b/libcontainer/criu_linux.go
+index 8cd8fa5a..154fb9c6 100644
+--- a/libcontainer/criu_linux.go
++++ b/libcontainer/criu_linux.go
+@@ -162,7 +162,7 @@ func (c *Container) handleCriuConfigurationFile(rpcOpts *criurpc.CriuOpts) {
+ 	} else {
+ 		// If the mentioned annotation has not been found, specify
+ 		// a default CRIU configuration file.
+-		rpcOpts.ConfigFile = proto.String("/etc/criu/runc.conf")
++		rpcOpts.ConfigFile = proto.String("@TERMUX_PREFIX@/etc/criu/runc.conf")
+ 	}
+ }
+ 
+diff --git a/list.go b/list.go
+index 997cd881..edddb638 100644
+--- a/list.go
++++ b/list.go
+@@ -47,7 +47,7 @@ var listCommand = cli.Command{
+ 	ArgsUsage: `
+ 
+ Where the given root is specified via the global option "--root"
+-(default: "/run/runc").
++(default:  "@TERMUX_PREFIX@/run/runc").
+ 
+ EXAMPLE 1:
+ To list containers created via the default "--root":
+diff --git a/main.go b/main.go
+index 5c09dac6..af982ca1 100644
+--- a/main.go
++++ b/main.go
+@@ -85,7 +85,7 @@ func main() {
+ 
+ 	cli.VersionPrinter = printVersion
+ 
+-	root := "/run/runc"
++	root := "@TERMUX_PREFIX@/run/runc"
+ 	xdgDirUsed := false
+ 	xdgRuntimeDir := os.Getenv("XDG_RUNTIME_DIR")
+ 	if xdgRuntimeDir != "" && shouldHonorXDGRuntimeDir() {

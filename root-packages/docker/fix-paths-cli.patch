@@ -1,0 +1,38 @@
+diff --git a/cli/cli-plugins/manager/manager_unix.go b/cli/cli-plugins/manager/manager_unix.go
+index f546dc3..671943e 100644
+--- a/cli/cli-plugins/manager/manager_unix.go
++++ b/cli/cli-plugins/manager/manager_unix.go
+@@ -13,8 +13,6 @@
+ //
+ // [ConfigFile.CLIPluginsExtraDirs]: https://pkg.go.dev/github.com/docker/cli@v26.1.4+incompatible/cli/config/configfile#ConfigFile.CLIPluginsExtraDirs
+ var defaultSystemPluginDirs = []string{
+-	"/usr/local/lib/docker/cli-plugins",
+-	"/usr/local/libexec/docker/cli-plugins",
+-	"/usr/lib/docker/cli-plugins",
+-	"/usr/libexec/docker/cli-plugins",
++	"@TERMUX_PREFIX@/libexec/docker/cli-plugins",
++	"@TERMUX_PREFIX@/lib/docker/cli-plugins",
+ }
+diff --git a/cli/opts/hosts.go b/cli/opts/hosts.go
+index 552ab6b..737af7a 100644
+--- a/cli/opts/hosts.go
++++ b/cli/opts/hosts.go
+@@ -17,7 +17,7 @@
+ 	defaultTLSHTTPPort = "2376" // Default TLS encrypted HTTP Port
+ 	// defaultUnixSocket Path for the unix socket.
+ 	// Docker daemon by default always listens on the default unix socket
+-	defaultUnixSocket = "/var/run/docker.sock"
++	defaultUnixSocket = "@TERMUX_PREFIX@/run/docker.sock"
+ 	// defaultTCPHost constant defines the default host string used by docker on Windows
+ 	defaultTCPHost = "tcp://" + defaultHTTPHost + ":" + defaultHTTPPort
+ 	// DefaultTLSHost constant defines the default host string used by docker for TLS sockets
+diff --git a/cli/vendor/github.com/docker/docker/client/client_unix.go b/cli/vendor/github.com/docker/docker/client/client_unix.go
+index 9fe78ea..01c2315 100644
+--- a/cli/vendor/github.com/docker/docker/client/client_unix.go
++++ b/cli/vendor/github.com/docker/docker/client/client_unix.go
+@@ -4,4 +4,4 @@
+ 
+ // DefaultDockerHost defines OS-specific default host if the DOCKER_HOST
+ // (EnvOverrideHost) environment variable is unset or empty.
+-const DefaultDockerHost = "unix:///var/run/docker.sock"
++const DefaultDockerHost = "unix://@TERMUX_PREFIX@/run/docker.sock"
